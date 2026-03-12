@@ -1803,6 +1803,33 @@
         "Archs": "magrittr.so.dSYM"
       }
     },
+    "maps": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "maps",
+        "Title": "Draw Geographical Maps",
+        "Version": "3.4.3",
+        "Date": "2025-05-15",
+        "Description": "Display of maps.  Projection code and larger maps are in\n             separate packages ('mapproj' and 'mapdata').",
+        "Depends": "R (>= 3.5.0)",
+        "Imports": "graphics, utils",
+        "LazyData": "yes",
+        "Suggests": "mapproj (>= 1.2-0), mapdata (>= 2.3.0), sf, rnaturalearth",
+        "License": "GPL-2",
+        "URL": "https://github.com/adeckmyn/maps",
+        "BugReports": "https://github.com/adeckmyn/maps/issues",
+        "Authors@R": "c(person(given  = c(\"Richard\", \"A.\"),\n                    family = \"Becker\",\n                    role   = \"aut\",\n                    comment= \"Original S code\"),\n             person(given  = c(\"Allan\", \"R.\"),\n                    family = \"Wilks\",\n                    role   = \"aut\",\n                    comment= \"Original S code\"),\n             person(given  = \"Ray\",\n                    family = \"Brownrigg\",\n                    role   = c(\"trl\", \"aut\"),\n                    comment= \"R version\"),\n             person(given  = c(\"Thomas\", \"P.\"),\n                    family = \"Minka\",\n                    role   = \"aut\",\n                    comment= \"Enhancements\"),\n             person(given  = \"Alex\",\n                    family = \"Deckmyn\",\n                    role   = c(\"aut\", \"cre\"),\n                    comment= c(ORCID=\"0009-0002-2010-8310\"),\n                    email  = \"alex.deckmyn@meteo.be\"))",
+        "NeedsCompilation": "yes",
+        "Repository": "CRAN",
+        "Packaged": "2025-05-19 08:35:55 UTC; alex",
+        "Author": "Richard A. Becker [aut] (Original S code),\n  Allan R. Wilks [aut] (Original S code),\n  Ray Brownrigg [trl, aut] (R version),\n  Thomas P. Minka [aut] (Enhancements),\n  Alex Deckmyn [aut, cre] (ORCID:\n    <https://orcid.org/0009-0002-2010-8310>)",
+        "Maintainer": "Alex Deckmyn <alex.deckmyn@meteo.be>",
+        "Date/Publication": "2025-05-26 17:40:02 UTC",
+        "Built": "R 4.4.1; aarch64-apple-darwin20; 2025-05-26 18:40:25 UTC; unix",
+        "Archs": "maps.so.dSYM"
+      }
+    },
     "memoise": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -3304,7 +3331,7 @@
       "checksum": "d9adc74d1a9d85c74918a15ec5ea201a"
     },
     "explorations_key_files/figure-html/unnamed-chunk-10-1.png": {
-      "checksum": "2a9956ec5d795a7d29fba015fc5517e7"
+      "checksum": "762bf338a43346bb4ba19dc948313a2a"
     },
     "explorations_key_files/figure-html/unnamed-chunk-6-1.png": {
       "checksum": "286a37ace5e99eba9c60d550dfea8479"
@@ -3577,10 +3604,10 @@
       "checksum": "49b23a276edf8677e7bb779525d2be7d"
     },
     "explorations_key.html": {
-      "checksum": "06b61f78b0bedec1a60ba4924c8c1c34"
+      "checksum": "754ead242e07a373d7229b72829c3902"
     },
     "explorations_key.qmd": {
-      "checksum": "dfc5fd7a56df6cae8d55690948e93ecd"
+      "checksum": "fd114041e9c40c744ca06d6868957648"
     },
     "images/tree.png": {
       "checksum": "4a21eb8dddda5b47d1a6a4d9cac606a0"
