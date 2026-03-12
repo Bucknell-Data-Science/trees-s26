@@ -1,0 +1,304 @@
+---
+title: "Tree Data Explorations"
+author: "Dominguez Center for Data Science"
+date: "3-26-2026" 
+format: html
+execute:
+  warning: false
+  message: false
+---
+
+# Quick introduction to `R`
+
+This document, which is called a Quarto document, contains instructions for creating maps of trees and forest attributes in `R`.  We are going to go through the code together but please ask if you have any questions!
+
+## But first: How to run and nodify code! 
+
+
+The following gray box is called an `R` **chunk**.
+
+-   To run all of the code in the gray box, click on the green triangle.
+
+-   To run a single line of code, put the cursor on the line you want to run and hit Command+Enter (for a Mac) and Control+Enter (for Windows).
+
+```{r}
+# Just a comment (R won't run this line!)
+2 + 2
+5 - 2
+```
+
+## Quarto
+
+Quarto is an open-source tool for storing and writing about our data work.
+
+-   Why are we using Quarto (instead of Word, Google Docs, Overleaf, etc)?
+    -   You can put all your work (code, output, and write-up) in one document which allows for a fully reproducible workflow.
+    -   When you render the Quarto file, you get a slick output document. Some of the output options include PDF, HTML, and MS Word.
+    -   You can insert math symbols (with what is called Latex code): $\mu$.
+-   When editing a Quarto document, you can choose between the Source editor or the Visual editor. We recommend testing out both.
+    -   **Source editor**: Shows the raw markdown syntax when editing.
+    -   **Visual editor**: Provides a word processor type interface when editing.
+
+
+## Packages
+
+
+-   Base `R` contains lots of useful commands to analyze data. However, people have developed new commands which are not packaged in this standard version of the program. Therefore, people create **packages** which contain these new commands.
+
+-   Whenever we want to use the commands from a package, we need to load the package.
+
+-   Below is the code that loads the `leaflet` package in your Quarto document. You will need to run the code (as described above) if you want `leaflet` to be loaded in your RStudio Session.
+
+```{r}
+library(leaflet)
+```
+
+-   Go to the **Packages** tab in the lower right. Notice that `leaflet` is listed and if you ran the code above, then it is loaded so the box next to `leaflet` should be checked.
+
+-   You may want to use a package that is not listed in the Packages Tab. In this case, you will need to install it first, which can be done using the "Install" button (if the package is shared via the Comprehensive R Archival Network).
+
+-   We have pre-installed on the server the packages we will need today.
+
+
+```{r}
+# For data wrangling and visualization
+library(tidyverse) 
+
+# For creating maps
+library(leaflet)
+
+# For adding labels to maps
+library(ggrepel)
+
+# For making labels in leaflet
+library(glue)
+
+```
+
+# Forest Inventory and Analysis Program
+
+Our first dataset comes from the Forest Inventory and Analysis (FIA) Program of the US Forest Service.  FIA is tasked with monitoring the status and trends of forests in the US.  Across the US, they collect data on trees using a systematic sampling design where they sample a plot of land about once every 6,000 acres.  Let's use their estimates of biomass and trees per acre to make maps in Pennsylvania.
+
+# Choropleth map of forest attributes in PA
+
+## Load the data
+
+Run the code below to load the data.  
+
+```{r}
+pa_county_trees <- read_csv("data/pa_county_trees.csv")
+```
+
+
+## Inspect the data
+
+After you have loaded the data, let's spend some time inspecting it.  How many variables and observations do we have?
+
+```{r}
+glimpse(pa_county_trees)
+```
+
+
+## Create a base map of PA
+
+Now let's create a simple map of the state of PA where we outline each of the counties.
+
+```{r}
+# Loads data on counties in PA
+pa_county_boundaries <- map_data("county", "pennsylvania")
+
+# Inspect the loaded data
+glimpse(pa_county_boundaries)
+
+
+# Generate a map of PA
+ggplot(data = pa_county_boundaries,
+       mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(fill = "white", color = "olivedrab") + 
+  coord_quickmap() +
+  theme_void()
+
+```
+
+Let's explore what each line of the code is doing.
+
+
+## Now to add the value of a forest attribute for each county.
+
+The dataset contains the variables `biomass`, which is the average tons of aboveground biomass per acre, and `trees_per_acre`, which is the average number of trees per acre.  Let's incorporate `biomass` into our map.
+
+
+```{r}
+ggplot(data = pa_county_trees,
+       mapping = aes(x = long, y = lat, group = group, fill = biomass)) +
+  geom_polygon(color = "olivedrab") + 
+  coord_quickmap() +
+  theme_void()
+```
+
+How could we improve on the default color palette?
+
+
+
+```{r}
+# Try the viridis option
+ggplot(data = pa_county_trees,
+       mapping = aes(x = long, y = lat, 
+                     group = group,
+                     fill = biomass)) +
+  geom_polygon(color = "olivedrab") + 
+  coord_quickmap() +
+  theme_void() +
+  scale_fill_viridis_c(direction  =  -1)
+
+# Change to a Greens palette
+ggplot(data = pa_county_trees,
+       mapping = aes(x = long, y = lat, 
+                     group = group,
+                     fill = biomass)) +
+  geom_polygon(color = "grey34") + 
+  coord_quickmap() +
+  theme_void() +
+  scale_fill_distiller(palette = "Greens",
+                       direction = 1) 
+  
+```
+
+How should we change the code to get a map of trees per acre instead of biomass?
+
+```{r}
+ggplot(data = pa_county_trees,
+       mapping = aes(x = long, y = lat, 
+                     group = group,
+                     fill = trees_per_acre)) +
+  geom_polygon(color = "grey34") + 
+  coord_quickmap() +
+  theme_void() +
+  scale_fill_distiller(palette = "Greens",
+                       direction = 1) 
+```
+
+
+
+## Add labels
+
+We can also label each of the counties with the following code:
+
+```
+geom_label_repel(data = pa_county_labels, 
+                   mapping = aes(label = county_label,
+                                 x = long, y = lat), 
+                   inherit.aes = FALSE)
+```
+
+```{r}
+pa_county_labels <- read_csv("data/pa_county_labels.csv")
+
+ggplot(data = pa_county_trees,
+       mapping = aes(x = long, y = lat, 
+                     group = group,
+                     fill = trees_per_acre)) +
+  geom_polygon(color = "grey34") + 
+  coord_quickmap() +
+  theme_void() +
+  scale_fill_distiller(palette = "Greens",
+                       direction = 1) +
+  geom_label_repel(data = pa_county_labels, 
+                   mapping = aes(label = county_label,
+                                 x = long,
+                                 y = lat), inherit.aes = FALSE)
+  
+  
+  
+```
+
+
+# Mapping trees on Bucknell's campus!
+
+Now let's learn how to map individual tree locations using data collected by students in Engineering 100. Thanks to Janine Glathar for the data! 
+
+## Load the data
+
+Run the code below to load and inspect the data.
+
+```{r}
+bucknell_trees <- read_csv("data/bucknell_trees.csv")
+glimpse(bucknell_trees)
+```
+
+## Create a simple map
+
+Now let's create a simple map of the locations of the trees.
+
+```{r}
+bucknell_trees %>%
+  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
+  addTiles() %>%
+  addMarkers(lat = ~y, lng = ~x)
+```
+
+## Add better icons
+
+We can improve upon the icons and label the tree species.  Let's play around with some options.
+
+```{r}
+# Add tree icon
+treeIcon <- makeIcon(
+  iconUrl = "images/tree.png",
+  iconWidth = 30, iconHeight = 25
+)
+
+
+# Create the map with the new icon
+bucknell_trees %>%
+  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
+  addTiles() %>%
+  addMarkers(lat = ~y, lng = ~x, label = ~tree_species,
+             icon = treeIcon)
+
+# Another tree icon
+treeIcon2 <- awesomeIcons(icon = 'tree',
+                      library = 'fa',
+                      markerColor = 'darkgreen')
+
+# Create the map with the new icon
+bucknell_trees %>%
+  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
+  addTiles() %>%
+  addAwesomeMarkers(lat = ~y, lng = ~x, label = ~tree_species,
+             icon = treeIcon2)
+
+
+
+
+
+```
+
+Notice that when you hover over one of the icons, you can see what the species of the tree.
+
+
+## Add more information to the label
+
+The Engineering 100 students captured lots of useful information about these trees!  Let's add that information to the tree labels.
+
+```{r}
+# Better label
+label_text <- glue(
+  "<b> Tree Species: </b> {bucknell_trees$tree_species} <br/>",
+  "<b> Condition: </b> {bucknell_trees$tree_condition} <br/>",
+  "<b> Sun: </b> {bucknell_trees$sun_exposure} <br/>",
+  "<b> Trunk Circumference (cm): </b> {bucknell_trees$trunk_circumference_cm} <br/>"
+) %>%
+  lapply(htmltools::HTML)
+
+
+# Recreate the map
+bucknell_trees %>%
+  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
+  addTiles() %>%
+  addAwesomeMarkers(lat = ~y, lng = ~x, label = label_text,
+             icon = treeIcon2)
+```
+
+
+I hope you had a fun time creating maps about trees with `R`!  Come talk to me if you want to learn more.
