@@ -130,11 +130,7 @@ The dataset contains the variables `biomass`, which is the average tons of above
 
 
 ```{r}
-ggplot(data = pa_county_trees,
-       mapping = aes(x = long, y = lat, group = group, fill = biomass)) +
-  geom_polygon(color = "olivedrab") + 
-  coord_quickmap() +
-  theme_void()
+
 ```
 
 How could we improve on the default color palette?
@@ -143,40 +139,17 @@ How could we improve on the default color palette?
 
 ```{r}
 # Try the viridis option
-ggplot(data = pa_county_trees,
-       mapping = aes(x = long, y = lat, 
-                     group = group,
-                     fill = biomass)) +
-  geom_polygon(color = "olivedrab") + 
-  coord_quickmap() +
-  theme_void() +
-  scale_fill_viridis_c(direction  =  -1)
+
 
 # Change to a Greens palette
-ggplot(data = pa_county_trees,
-       mapping = aes(x = long, y = lat, 
-                     group = group,
-                     fill = biomass)) +
-  geom_polygon(color = "grey34") + 
-  coord_quickmap() +
-  theme_void() +
-  scale_fill_distiller(palette = "Greens",
-                       direction = 1) 
+
   
 ```
 
 How should we change the code to get a map of trees per acre instead of biomass?
 
 ```{r}
-ggplot(data = pa_county_trees,
-       mapping = aes(x = long, y = lat, 
-                     group = group,
-                     fill = trees_per_acre)) +
-  geom_polygon(color = "grey34") + 
-  coord_quickmap() +
-  theme_void() +
-  scale_fill_distiller(palette = "Greens",
-                       direction = 1) 
+ 
 ```
 
 
@@ -193,21 +166,10 @@ geom_label_repel(data = pa_county_labels,
 ```
 
 ```{r}
+# Load a dataset of county labels
 pa_county_labels <- read_csv("data/pa_county_labels.csv")
 
-ggplot(data = pa_county_trees,
-       mapping = aes(x = long, y = lat, 
-                     group = group,
-                     fill = trees_per_acre)) +
-  geom_polygon(color = "grey34") + 
-  coord_quickmap() +
-  theme_void() +
-  scale_fill_distiller(palette = "Greens",
-                       direction = 1) +
-  geom_label_repel(data = pa_county_labels, 
-                   mapping = aes(label = county_label,
-                                 x = long,
-                                 y = lat), inherit.aes = FALSE)
+
   
   
   
@@ -251,11 +213,7 @@ treeIcon <- makeIcon(
 
 
 # Create the map with the new icon
-bucknell_trees %>%
-  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
-  addTiles() %>%
-  addMarkers(lat = ~y, lng = ~x, label = ~tree_species,
-             icon = treeIcon)
+
 
 # Another tree icon
 treeIcon2 <- awesomeIcons(icon = 'tree',
@@ -263,11 +221,7 @@ treeIcon2 <- awesomeIcons(icon = 'tree',
                       markerColor = 'darkgreen')
 
 # Create the map with the new icon
-bucknell_trees %>%
-  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
-  addTiles() %>%
-  addAwesomeMarkers(lat = ~y, lng = ~x, label = ~tree_species,
-             icon = treeIcon2)
+
 
 
 
@@ -294,11 +248,7 @@ label_text <- glue(
 
 
 # Recreate the map
-bucknell_trees %>%
-  leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
-  addTiles() %>%
-  addAwesomeMarkers(lat = ~y, lng = ~x, label = label_text,
-             icon = treeIcon2)
+
 ```
 
 
