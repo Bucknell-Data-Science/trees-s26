@@ -235,7 +235,7 @@ Now let's create a simple map of the locations of the trees.
 bucknell_trees %>%
   leaflet(options = leafletOptions(minZoom = 16, maxZoom = 18)) %>%
   addTiles() %>%
-  addMarkers(lat = ~y, lng = ~x)
+  addMarkers(lat = ~y, lng = ~x, label = ~tree_species)
 ```
 
 ## Add better icons
