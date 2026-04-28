@@ -229,7 +229,7 @@ treeIcon2 <- awesomeIcons(icon = 'tree',
 
 ```
 
-Notice that when you hover over one of the icons, you can see what the species of the tree.
+Notice that when you hover over one of the icons, you can see the species of the tree.
 
 
 ## Add more information to the label
